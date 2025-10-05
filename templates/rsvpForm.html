@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>RSVP for {{ event.eventName }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}">
+</head>
+<body>
+    <h1>RSVP for {{ event.eventName }}</h1>
+    <h3> From {{ event["startTime"] }} to {{ event["endTime"] }} on {{ event["eventDate"] }} </h3>
+    <h3> {{event["eventLocation"] }} </h3>
+    <form method="POST">
+        <label>Email:</label>
+        <input type="email" name="email" required><br>
+
+        <label>First Name:</label>
+        <input type="text" name="firstName" required><br>
+
+        <label>Last Name:</label>
+        <input type="text" name="lastName" required><br>
+
+        <button type="submit">Submit RSVP</button>
+    </form>
+</body>
+</html>

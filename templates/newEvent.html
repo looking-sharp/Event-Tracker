@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Host a New Event</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}">
+</head>
+<body>
+    <h1>Host a New Event</h1>
+    <form action="/createEvent/{{ user_id }}" method="POST">
+        <label for="eventName">Event Name:</label>
+        <input type="text" id="eventName" name="eventName" required>
+
+        <label for="eventDate">Date:</label>
+        <input type="date" id="eventDate" name="eventDate" required>
+
+        <label for="startTime">Start Time:</label>
+        <input type="time" id="startTime" name="startTime" required>
+
+        <label for="endTime">End Time:</label>
+        <input type="time" id="endTime" name="endTime" required>
+
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" required>
+
+        <label for="public">Others can see who else is coming: 
+        <input type="checkbox" id="public" name="public" required checked> </label>
+
+        <label for="description">Event Description:</label>
+        <textarea id="description" name="description" rows="4" required></textarea>
+
+        <button type="submit">Submit Event</button>
+    </form>
+</body>
+</html>
