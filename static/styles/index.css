@@ -132,6 +132,8 @@ input[type=checkbox], input[type=radio] {
   background-color: #04AA6D;
   transition: 5ms;
   border: none;
+  width: 12em;
+  font-weight: bold;
 }
 
 .drop-button:hover {
@@ -140,4 +142,32 @@ input[type=checkbox], input[type=radio] {
 
 .drop-button-class {
   max-width: revert;
+  margin-right: 0.1%;
+  margin-bottom: 0.5%;
+  min-width: 20%;
+}
+
+.Data-Div {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 80%;
+  float: left;
+}
+
+.Delete-Div {
+  display: inline-flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  min-width: 20%;
+}
+
+.Info-Div {
+  display: table;
+  width:100%;
+}
+
+.Data-Div p {
+  margin-top: 1%;
+  margin-bottom: 1%;
 }
