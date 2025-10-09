@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class=".non-fixed">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,12 +9,16 @@
 <header>
     <h1>Welcome {{username}}</h1>
     <nav class="navlinks">
-        <a href="/createEvent/{{ user_id }}">Create a new Event</a>
+        <a href="/createEvent/{{ user_id }}">Create a New Event</a>
         <a href='/'>Sign Out</a>
     </nav>
 </header>
-<body class=".non-fixed">
-    <h2>Your events:</h2>
+<body>
+    <h2 class="event_title">Your events:</h2>
+    {% if event|length == 0 %}
+        <p class="no_event"><b>Looks like you have no events scheduled yet</b>
+        <br><br> Press the "Create a New Event" button above to make your first event</p>
+    {% endif %}
     {% for event in events %}
     <div class="event-div" id='{{event["_id"]}}'>
         <div class="Info-Div">

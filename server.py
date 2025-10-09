@@ -34,6 +34,9 @@ def sign_up():
         if userCheck == None:
             #upload username to db
             password = request.form["password"]
+            c_password = request.form["c_password"]
+            if password != c_password:
+                return render_template("signUp.html", passwords_dont_match=True)
             user_id = uuid.uuid4().hex[:8]
             # while unlikely, don't want more than one user to have same id
             while db.users.find_one({"_id":user_id}):

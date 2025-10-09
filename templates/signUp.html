@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}">
+    <script src="{{ url_for('static',filename='scripts/form.js') }}"></script>
     <title>Main</title>
 </head>
 <header>
@@ -16,9 +17,19 @@
 <body class="fixed-body">
   <form method="POST">
     <input type="text" name="username" placeholder="Username">
-    <input type="password" name="password" placeholder="Password">
+    <div class="icons">
+      <svg class="fa-eye" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"></svg>
+    </div>
+    <input type="password" class="pass" name="password" placeholder="Password">
+    <div class="icons2">
+      <svg class="fa-eye" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"></svg>
+    </div>
+    <input type="password" class="pass2" name="c_password" placeholder="Confirm Password">
     <button type="submit">Create Account</button>
   </form>
+  {% if passwords_dont_match %}
+    <p>Your password must match</p>
+  {% endif %}
   {% if username_taken %}
     <p> The username "{{username}}" is taken</p>
   {% endif %}

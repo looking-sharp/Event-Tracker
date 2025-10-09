@@ -120,7 +120,8 @@ input[type=checkbox], input[type=radio] {
 .event-div {
   outline: solid 1px #423e3c;
   padding: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
+  margin-top: 12px;
   border-radius: 4px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2)
 }
@@ -200,4 +201,43 @@ footer {
   background-color: #423e3c;
   color: white;
   margin-bottom: 2em;
+}
+
+
+.icons {
+  position: absolute;
+}
+
+.icons svg {
+  position: relative;
+  left:483px;
+  top:7px;
+  width:25px;
+  height:auto;
+  cursor: pointer;
+}
+
+.icons2 {
+  position: absolute;
+}
+
+.icons2 svg {
+  position: relative;
+  left:483px;
+  top:7px;
+  width:25px;
+  height:auto;
+  cursor: pointer;
+}
+
+.event_title {
+  margin: auto;
+  margin-top: 0;
+  margin-left: 0;
+}
+
+.no_event {
+  margin: auto;
+  text-align: center;
+  font-size: large;
 }
