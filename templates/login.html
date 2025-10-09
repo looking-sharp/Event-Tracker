@@ -6,8 +6,14 @@
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}">
     <title>Main</title>
 </head>
-<body>
-  <h1>Log In</h1>
+<header>
+  <h1>Login</h1>
+  <nav class="navlinks">
+    <a href='/signUp'>Sign Up</a>
+    <a href='/'>Home</a>
+  </nav>
+</header>
+<body class="fixed-body">
   <form method="POST">
     <input type="text" name="username" placeholder="Username">
     <input type="password" name="password" placeholder="Password">
@@ -16,5 +22,8 @@
   {% if login_failed %}
     <p>Username or Password was incorrect</p>
   {% endif %}
+  <footer>
+    Website by Thomas Sharp
+  </footer>
 </body>
 </html>
