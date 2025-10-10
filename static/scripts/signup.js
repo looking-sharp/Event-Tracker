@@ -7,7 +7,7 @@ const passwordInput = document.getElementById("password");
 const statusSpan = document.getElementById("username-status");
 const passwordSpan = document.getElementById("password-status");
 let typingTimer; // used for debounce
-const debounceDelay = 300; // milliseconds
+const debounceDelay = 100; // milliseconds
 
 let usernameGood = false;
 let passwordGood = false;

@@ -3,6 +3,7 @@ from pymongo.server_api import ServerApi
 from dotenv import load_dotenv # type: ignore
 from flask import Flask, request, redirect, url_for, render_template, jsonify # type: ignore
 from datetime import datetime
+import random
 import uuid
 import os
 
@@ -123,12 +124,86 @@ def rsvp(event_id):
         return "Thanks for RSVPing!"
     return render_template("rsvpForm.html", event=event)
 
-@app.route("/delete_event/<event_id>/<user_id>", methods=["POST"])
-def delete_event(event_id, user_id):
+def delete_event_logic(event_id, user_id):
     result = db.events.delete_one({"_id": event_id, "user_id": user_id})
     if result.deleted_count == 0:
         return "Event not found or you don't have permission", 404
+    return "Deleted", 200
+
+@app.route("/delete_event/<event_id>/<user_id>", methods=["POST"])
+def delete_event(event_id, user_id):
+    delete_event_logic(event_id, user_id)
     return redirect(url_for("user_page", user_id=user_id))
+
+@app.route("/delete_account/<user_id>", methods=["POST"])
+def delete_account(user_id):
+    user = db.users.find_one({"_id":user_id})
+    if user != None:
+        events = db.events.find({"user_id": user_id})
+        for event in events:
+            delete_event_logic(event["_id"], user_id)
+        db.users.delete_one({"_id": user_id})
+    return redirect(url_for("sign_up"))
+
+
+def generate_random_time():
+    hour = random.randint(8, 18)
+    return datetime.strptime(f"{hour}:00", "%H:%M").strftime("%I:%M %p")
+
+@app.route("/api/seed_test_data", methods=["POST"])
+def api_seed_test_data():
+    data = request.json
+    user_id = data.get("user_id")
+    num_events = int(data.get("events", 3))
+    num_rsvps = int(data.get("rsvps", 5))
+
+    user = db.users.find_one({"_id": user_id})
+    if not user:
+        return jsonify({"error": f"User ID {user_id} not found"}), 404
+
+    created_event_ids = []
+
+    for i in range(num_events):
+        event_id = uuid.uuid4().hex[:8]
+        event_name = f"Test Event {i+1}"
+        date_str = datetime.now().strftime("%Y-%m-%d")
+        start_time = generate_random_time()
+        end_time = generate_random_time()
+        public = "yes"
+        event_location = f"Test Location {i+1}"
+        event_description = f"This is test event number {i+1}."
+
+        db.events.insert_one({
+            "_id": event_id,
+            "user_id": user_id,
+            "eventName": event_name,
+            "eventDate": date_str,
+            "startTime": start_time,
+            "endTime": end_time,
+            "public": public,
+            "eventLocation": event_location,
+            "eventDescription": event_description,
+            "rsvps": []
+        })
+
+        for j in range(num_rsvps):
+            rsvp_entry = {
+                "email": f"guest{j+1}@example.com",
+                "firstName": f"Guest{j+1}",
+                "lastName": "Tester"
+            }
+            db.events.update_one(
+                {"_id": event_id},
+                {"$addToSet": {"rsvps": rsvp_entry}}
+            )
+
+        created_event_ids.append(event_id)
+
+    return jsonify({
+        "message": f"Seeded {num_events} events with {num_rsvps} RSVPs each.",
+        "events": created_event_ids
+    })
+
 
 if __name__ == "__main__":
     app.run(debug=True)

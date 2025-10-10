@@ -241,3 +241,21 @@ footer {
   text-align: center;
   font-size: large;
 }
+
+#delete-account {
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+#delete-account button {
+  color:white;
+  background-color: #aa0404;
+  transition: 5ms;
+  border: none;
+  width: 12em;
+  font-weight: bold;
+}
+
+#delete-account button:hover {
+  background-color: #7e0606;
+}
