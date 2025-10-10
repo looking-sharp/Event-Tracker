@@ -84,11 +84,16 @@ def create_event(user_id):
         event_description = request.form["description"]
         start_time = format_time(request.form["startTime"])
         end_time = format_time(request.form["endTime"])
+        # Optional Info
         public = request.form["public"]
+        age_restriction = request.form["age_restriction"]
+        attendence_restriction = request.form["attendence_restriction"]
+        # id
         event_id = uuid.uuid4().hex[:8]
         while db.events.find_one({"_id":event_id}):
             event_id = uuid.uuid4().hex[:8]
-        db.events.insert_one({
+        
+        event_doc = {
             "_id": event_id,
             "user_id": user_id,
             "eventName": event_name,
@@ -98,8 +103,17 @@ def create_event(user_id):
             "public": public,
             "eventLocation": event_location,
             "eventDescription": event_description,
-            "rsvps":[]
-        })
+            "rsvps": []
+        }
+
+        if age_restriction:
+            event_doc["age_restriction"] = age_restriction
+        if attendence_restriction:
+            event_doc["attendance_restriction"] = attendence_restriction
+
+        # Insert into MongoDB
+        db.events.insert_one(event_doc)
+
         return redirect(url_for("user_page", user_id=user_id))
     return render_template("newEvent.html", user_id=user_id)
 
