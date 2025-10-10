@@ -259,3 +259,7 @@ footer {
 #delete-account button:hover {
   background-color: #7e0606;
 }
+
+#login_failed_error {
+  color:red;
+}

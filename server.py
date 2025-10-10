@@ -145,6 +145,11 @@ def delete_account(user_id):
         db.users.delete_one({"_id": user_id})
     return redirect(url_for("sign_up"))
 
+'''
+
+** Debug Commands **
+
+'''
 
 def generate_random_time():
     hour = random.randint(8, 18)

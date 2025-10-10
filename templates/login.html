@@ -20,11 +20,11 @@
       <svg class="fa-eye" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"></svg>
     </div>
     <input type="password" class="pass" name="password" placeholder="Password">
+    {% if login_failed %}
+      <span id="login_failed_error">Username or Password was incorrect<br></span>
+    {% endif %}
     <button type="submit">Log in</button>
   </form>
-  {% if login_failed %}
-    <p>Username or Password was incorrect</p>
-  {% endif %}
   <footer>
     Website by Thomas Sharp
   </footer>
