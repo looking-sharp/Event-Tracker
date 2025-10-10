@@ -9,6 +9,14 @@ const passwordSpan = document.getElementById("password-status");
 let typingTimer; // used for debounce
 const debounceDelay = 300; // milliseconds
 
+let usernameGood = false;
+let passwordGood = false;
+
+document.addEventListener("DOMContentLoaded", () => {
+    checkPassword();
+    checkUsername();
+})
+
 usernameInput.addEventListener("input", () => {
     clearTimeout(typingTimer);
     typingTimer = setTimeout(checkUsername, debounceDelay);
@@ -33,15 +41,18 @@ function checkUsername() {
       if (data.exists) {
         statusSpan.textContent = "Username already taken";
         statusSpan.style.color = "red";
+        usernameGood = false;
       } else {
         statusSpan.textContent = "Username available";
         statusSpan.style.color = "green";
+        usernameGood = true;
       }
     })
     .catch(err => {
       console.error("Error checking username:", err);
       statusSpan.textContent = "Error checking username";
       statusSpan.style.color = "orange";
+      usernameGood = false;
     });
 }
 
@@ -56,9 +67,21 @@ function checkPassword() {
     if(password != c_password) {
         passwordSpan.innerHTML = "Passwords must match<br>"
         passwordSpan.style.color = "red";
+        passwordGood = false;
     }
     else if(password == c_password) {
         passwordSpan.innerHTML = "Passwords matching<br>"
         passwordSpan.style.color = "green";
+        passwordGood = true;
     }
+}
+
+function validateForm() {
+    if(!passwordGood || !usernameGood)
+    { 
+        alert("Username or Password not valid");
+        return false;
+    }
+    document.getElementById("signupForm").submit();
+    return true;
 }

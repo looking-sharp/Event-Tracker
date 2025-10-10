@@ -31,18 +31,6 @@ def sign_up():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        c_password = request.form["c_password"]
-        userCheck = db.users.find_one({"username": username})
-        if(userCheck != None):
-            return render_template("signUp.html", username_taken=True, username=username)
-        elif (password == "" or password == None):
-            return render_template("signUp.html", password_empty=True)
-        elif (password != c_password):
-            return render_template("signUp.html", passwords_dont_match=True)
-        #upload username to db
-        c_password = request.form["c_password"]
-        if password != c_password:
-            return render_template("signUp.html", passwords_dont_match=True)
         user_id = uuid.uuid4().hex[:8]
         # while unlikely, don't want more than one user to have same id
         while db.users.find_one({"_id":user_id}):

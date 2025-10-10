@@ -14,7 +14,7 @@
   </nav>
 </header>
 <body class="fixed-body">
-  <form method="POST">
+  <form method="POST" onsubmit="event.preventDefault(); validateForm();" id="signupForm">
     <input type="text" name="username" placeholder="Username" id="username">
     <span id="username-status"></span>
     <div class="icons">
@@ -29,15 +29,6 @@
   
     <button type="submit">Create Account</button>
   </form>
-  {% if password_empty %}
-    <p>Password cannot be empty</p>
-  {% endif %}
-  {% if passwords_dont_match %}
-    <p>Your password must match</p>
-  {% endif %}
-  {% if username_taken %}
-    <p> The username "{{username}}" is taken</p>
-  {% endif %}
   <footer>
     Website by Thomas Sharp
   </footer>
