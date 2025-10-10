@@ -15,7 +15,7 @@
 </header>
 <body>
     <h2 class="event_title">Your events:</h2>
-    {% if event|length == 0 %}
+    {% if num_events == 0 %}
         <p class="no_event"><b>Looks like you have no events scheduled yet</b>
         <br><br> Press the "Create a New Event" button above to make your first event</p>
     {% endif %}
