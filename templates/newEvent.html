@@ -29,11 +29,19 @@
         <textarea id="description" name="description" rows="4" required></textarea>
 
         <label>Optional Settings</label>
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" id="dropdown_arrow"></svg>
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" id="dropdown_arrow"></svg><br>
 
-        <div id="optional-questions" style="display: none; margin-top: 1em;">
-            <label for="public">Others can see who else is coming: 
+        <div id="optional-questions" style="display: none;">
+            <label for="public" title="If checked, attendees can see the names of other people attending">Public Attendee Info: 
             <input type="checkbox" id="public" name="public" checked> </label>
+
+            <div class="side_div">
+                <label for="age_restriction" class="side_label">Age Restriction: </label>
+                <input type="number" class="side_text">
+            </div>
+
+            <label for="attendence_restriction">Attendence Restriction</label>
+            <textarea id="attendence_restriction" name="attendence_restriction" rows="4"></textarea>
         </div>
 
         <button type="submit">Submit Event</button>

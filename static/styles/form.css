@@ -1,22 +1,41 @@
 form { 
-    width: 500px; 
-    margin: auto; 
+  width: 500px; 
+  margin: auto; 
 }
 
 label { 
-    display: block; 
-    margin-top: 1em; 
+  display: inline-block; 
+  margin-top: 1em; 
 }
 
 input, textarea {
-    width: 100%; 
-    padding: 0.5em; 
-    margin-top: 0.2em; 
+  width: 100%; 
+  padding: 0.5em; 
+  margin-top: 0.2em; 
+}
+
+.side_div {
+  display:flex;
+  align-items: baseline;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.side_label {
+  width:80%;
+}
+
+.side_text {
+  width:20%;
+}
+
+#attendence_restriction {
+  width:480px;
 }
 
 button { 
-    margin-top: 1.5em; 
-    padding: 0.7em 1.5em; 
+  margin-top: 1.5em; 
+  padding: 0.7em 1.5em; 
 }
 
 label {
@@ -29,8 +48,8 @@ input[type=checkbox], input[type=radio] {
   margin: 0;
   width: 1.3em;
   height: 1.3em;
-  position: relative;
-  margin-left: 10em;
+  position: absolute;
+  margin-left: 475px;
 }
 
 .icons {
@@ -77,14 +96,20 @@ input[type=checkbox], input[type=radio] {
 
 #dropdown_arrow {
   cursor: pointer;
-  cursor: pointer;
   position: relative;
   left: 128px;
-  top: -41px;
+  top: -21px;
   width: 25px;
   height: auto;
 }
 
+#optional-questions {
+  margin: 0;
+  border: solid 1px gray;
+  width: 500px;
+  padding: 0.5em;
+  padding-top: 0;
+}
 
 .drop-button {
   float: right;
