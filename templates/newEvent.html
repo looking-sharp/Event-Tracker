@@ -5,6 +5,7 @@
     <title>Host a New Event</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/form.css') }}">
 </head>
 <body>
     <h1>Host a New Event</h1>
@@ -24,13 +25,19 @@
         <label for="location">Location:</label>
         <input type="text" id="location" name="location" required>
 
-        <label for="public">Others can see who else is coming: 
-        <input type="checkbox" id="public" name="public" required checked> </label>
-
         <label for="description">Event Description:</label>
         <textarea id="description" name="description" rows="4" required></textarea>
 
+        <label>Optional Settings</label>
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" id="dropdown_arrow"></svg>
+
+        <div id="optional-questions" style="display: none; margin-top: 1em;">
+            <label for="public">Others can see who else is coming: 
+            <input type="checkbox" id="public" name="public" checked> </label>
+        </div>
+
         <button type="submit">Submit Event</button>
     </form>
+    <script src="{{ url_for('static',filename='scripts/newEvent.js') }}"></script>
 </body>
 </html>

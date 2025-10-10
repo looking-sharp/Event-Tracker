@@ -1,0 +1,101 @@
+form { 
+    width: 500px; 
+    margin: auto; 
+}
+
+label { 
+    display: block; 
+    margin-top: 1em; 
+}
+
+input, textarea {
+    width: 100%; 
+    padding: 0.5em; 
+    margin-top: 0.2em; 
+}
+
+button { 
+    margin-top: 1.5em; 
+    padding: 0.7em 1.5em; 
+}
+
+label {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* space between text and checkbox */
+}
+
+input[type=checkbox], input[type=radio] {
+  margin: 0;
+  width: 1.3em;
+  height: 1.3em;
+  position: relative;
+  margin-left: 10em;
+}
+
+.icons {
+  position: absolute;
+}
+
+.icons svg {
+  position: relative;
+  left:483px;
+  top:7px;
+  width:25px;
+  height:auto;
+  cursor: pointer;
+}
+
+.icons2 {
+  position: absolute;
+}
+
+.icons2 svg {
+  position: relative;
+  left:483px;
+  top:7px;
+  width:25px;
+  height:auto;
+  cursor: pointer;
+}
+
+.event_title {
+  margin: auto;
+  margin-top: 0;
+  margin-left: 0;
+}
+
+.no_event {
+  margin: auto;
+  text-align: center;
+  font-size: large;
+}
+
+#login_failed_error {
+  color:red;
+}
+
+#dropdown_arrow {
+  cursor: pointer;
+  cursor: pointer;
+  position: relative;
+  left: 128px;
+  top: -41px;
+  width: 25px;
+  height: auto;
+}
+
+
+.drop-button {
+  float: right;
+  color:white;
+  background-color: #04AA6D;
+  transition: 5ms;
+  border: none;
+  width: 12em;
+  font-weight: bold;
+}
+
+.drop-button:hover {
+  background-color: #047f52;
+}
