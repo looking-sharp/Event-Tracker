@@ -1,7 +1,7 @@
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from dotenv import load_dotenv # type: ignore
-from flask import Flask, request, redirect, url_for, render_template # type: ignore
+from flask import Flask, request, redirect, url_for, render_template, jsonify # type: ignore
 from datetime import datetime
 import uuid
 import os
@@ -30,26 +30,39 @@ def index():
 def sign_up():
     if request.method == "POST":
         username = request.form["username"]
+        password = request.form["password"]
+        c_password = request.form["c_password"]
         userCheck = db.users.find_one({"username": username})
-        if userCheck == None:
-            #upload username to db
-            password = request.form["password"]
-            c_password = request.form["c_password"]
-            if password != c_password:
-                return render_template("signUp.html", passwords_dont_match=True)
-            user_id = uuid.uuid4().hex[:8]
-            # while unlikely, don't want more than one user to have same id
-            while db.users.find_one({"_id":user_id}):
-                user_id = uuid.uuid4().hex[:8]
-            db.users.insert_one({
-                "_id": user_id,
-                "username": username,
-                "password": password
-            })
-            return redirect(url_for("user_page", user_id=user_id))
-        else:
+        if(userCheck != None):
             return render_template("signUp.html", username_taken=True, username=username)
+        elif (password == "" or password == None):
+            return render_template("signUp.html", password_empty=True)
+        elif (password != c_password):
+            return render_template("signUp.html", passwords_dont_match=True)
+        #upload username to db
+        c_password = request.form["c_password"]
+        if password != c_password:
+            return render_template("signUp.html", passwords_dont_match=True)
+        user_id = uuid.uuid4().hex[:8]
+        # while unlikely, don't want more than one user to have same id
+        while db.users.find_one({"_id":user_id}):
+            user_id = uuid.uuid4().hex[:8]
+        db.users.insert_one({
+            "_id": user_id,
+            "username": username,
+            "password": password
+        })
+        return redirect(url_for("user_page", user_id=user_id))
     return render_template("signUp.html")
+
+@app.route("/check_username")
+def check_username():
+    username = request.args.get("username", "").strip()
+    if not username:
+        return jsonify({"exists": False})
+
+    exists = db.users.find_one({"username": username}) is not None
+    return jsonify({"exists": exists})
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
