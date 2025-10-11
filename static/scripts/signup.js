@@ -77,6 +77,8 @@ function checkPassword() {
 }
 
 function validateForm() {
+    checkPassword();
+    checkUsername();
     if(!passwordGood || !usernameGood)
     { 
         alert("Username or Password not valid");
