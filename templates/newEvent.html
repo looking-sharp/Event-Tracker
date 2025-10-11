@@ -16,22 +16,22 @@
 </header>
 <body class="non-fixed">
     <form action="/createEvent/{{ user_id }}" method="POST">
-        <label for="eventName">Event Name:</label>
+        <label for="eventName" title="The name of your event">Event Name:</label>
         <input type="text" id="eventName" name="eventName" required>
 
-        <label for="eventDate">Date:</label>
+        <label for="eventDate" title="the date of your event">Date:</label>
         <input type="date" id="eventDate" name="eventDate" required>
 
-        <label for="startTime">Start Time:</label>
+        <label for="startTime" title="Start time of your event">Start Time:</label>
         <input type="time" id="startTime" name="startTime" required>
 
-        <label for="endTime">End Time:</label>
+        <label for="endTime" title="End time of your event">End Time:</label>
         <input type="time" id="endTime" name="endTime" required>
 
-        <label for="location">Location:</label>
+        <label for="location" title="Location of your event">Location:</label>
         <input type="text" id="location" name="location" required>
 
-        <label for="description">Event Description:</label>
+        <label for="description" title="Description of your event">Event Description:</label>
         <textarea id="description" name="description" rows="4" required></textarea>
 
         <label>Optional Settings</label>
@@ -42,11 +42,11 @@
             <input type="checkbox" id="public" name="public" checked> </label>
 
             <div class="side_div">
-                <label for="age_restriction" class="side_label">Age Restriction: </label>
+                <label for="age_restriction" title="Input minimum age allowed to attend your event, or leave blank" class="side_label">Age Restriction: </label>
                 <input type="number" class="side_text" id="age_restriction" name="age_restriction">
             </div>
 
-            <label for="attendence_restriction">Attendence Restriction</label>
+            <label for="attendence_restriction" title="Input any restrictions that might restrict attendence (e.g. club members only) or leave blank">Attendence Restriction</label>
             <textarea id="attendence_restriction" name="attendence_restriction" id="attendence_restriction" rows="4"></textarea>
         </div>
 
