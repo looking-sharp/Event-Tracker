@@ -85,7 +85,7 @@ def create_event(user_id):
         start_time = format_time(request.form["startTime"])
         end_time = format_time(request.form["endTime"])
         # Optional Info
-        public = request.form["public"]
+        public = bool(request.form.get('public'))
         age_restriction = request.form["age_restriction"]
         attendence_restriction = request.form["attendence_restriction"]
         # id
@@ -159,6 +159,67 @@ def delete_account(user_id):
         db.users.delete_one({"_id": user_id})
     return redirect(url_for("sign_up"))
 
+@app.route("/updateEvent/<user_id>/<event_id>", methods=["GET", "POST"])
+def update_event(user_id, event_id):
+    # Get the event from DB first
+    event = db.events.find_one({"_id": event_id, "user_id": user_id})
+    if not event:
+        return "Event not found or unauthorized", 404
+
+    if request.method == "POST":
+        event_name = request.form["eventName"]
+        event_date = request.form["eventDate"]
+        event_location = request.form["location"]
+        event_description = request.form["description"]
+        start_time = format_time(request.form["startTime"])
+        end_time = format_time(request.form["endTime"])
+        # Optional Info
+        public = bool(request.form.get('public'))
+        age_restriction = request.form["age_restriction"]
+        attendence_restriction = request.form["attendence_restriction"]
+
+        updated_fields = {
+            "eventName": event_name,
+            "eventDate": event_date,
+            "eventLocation": event_location,
+            "eventDescription": event_description,
+            "startTime": start_time,
+            "endTime": end_time,
+            "public": public
+        }
+
+        if age_restriction:
+            updated_fields["age_restriction"] = age_restriction
+        else:
+            db.events.update_one({"_id": event_id, "user_id": user_id}, {"$unset": {"age_restriction": ""}})
+        
+        if attendence_restriction:
+            updated_fields["attendence_restriction"] = attendence_restriction
+        else:
+            db.events.update_one({"_id": event_id, "user_id": user_id}, {"$unset": {"attendence_restriction": ""}})
+
+        db.events.update_one({"_id": event_id, "user_id": user_id}, {"$set": updated_fields})
+
+        return redirect(url_for("user_page", user_id=user_id))
+
+    # GET request: show prefilled form
+    return render_template("updateEvent.html", user_id=user_id, event_id=event["_id"])
+
+
+@app.route("/getEvent")
+def get_event():
+    print("got request")
+    event_id = request.args.get("event_id", "").strip()
+    if db.events.find_one({"_id":event_id}):
+        print("Found data")
+        data = {
+            "exists": True,
+            "event": db.events.find_one({"_id":event_id})
+        }
+        return jsonify(data)
+    return jsonify({"exists":False, "event": None})
+
+
 '''
 
 ** Debug Commands **
@@ -222,7 +283,6 @@ def api_seed_test_data():
         "message": f"Seeded {num_events} events with {num_rsvps} RSVPs each.",
         "events": created_event_ids
     })
-
 
 if __name__ == "__main__":
     app.run(debug=True)

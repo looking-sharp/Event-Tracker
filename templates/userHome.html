@@ -36,7 +36,7 @@
                         Delete Event
                     </button>
                 </form>
-                <form action='' method="POST" class="drop-button-class">
+                <form action='{{ url_for("update_event", event_id=event["_id"], user_id=user_id) }}' method="GET" class="drop-button-class">
                     <button type="submit" onclick="" class="drop-button">
                         Update Event
                     </button>
