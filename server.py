@@ -3,6 +3,7 @@ from pymongo.server_api import ServerApi
 from dotenv import load_dotenv # type: ignore
 from flask import Flask, request, redirect, url_for, render_template, jsonify # type: ignore
 from datetime import datetime
+from encode import encode, decode
 import random
 import uuid
 import os
@@ -41,7 +42,7 @@ def sign_up():
             "username": username,
             "password": password
         })
-        return redirect(url_for("user_page", user_id=user_id))
+        return redirect(url_for("user_page", user_id=encode(user_id)))
     return render_template("signUp.html")
 
 @app.route("/check_username")
@@ -62,21 +63,23 @@ def login():
         print(user)
         if user == None:
             return render_template("login.html", login_failed=True)
-        return redirect(url_for("user_page", user_id=user["_id"]))
+        return redirect(url_for("user_page", user_id=encode(user["_id"])))
     return render_template("login.html")
 
 @app.route("/userHome/<user_id>")
 def user_page(user_id):
+    user_id = decode(user_id)
     user = db.users.find_one({"_id":user_id})
     if user == None:
         # user needs to log in first
         return render_template("signUp.html")
     events = db.events.find({"user_id":user_id})
     num_events = db.events.count_documents({"user_id": user_id})
-    return render_template("userHome.html", username=user["username"], user_id=user_id, events=events, num_events=num_events)
+    return render_template("userHome.html", username=user["username"], user_id=encode(user_id), events=events, num_events=num_events)
     
 @app.route("/createEvent/<user_id>", methods=["GET", "POST"])
 def create_event(user_id):
+    user_id = decode(user_id)
     if request.method == "POST":
         event_name = request.form["eventName"]
         event_date = request.form["eventDate"]
@@ -114,8 +117,8 @@ def create_event(user_id):
         # Insert into MongoDB
         db.events.insert_one(event_doc)
 
-        return redirect(url_for("user_page", user_id=user_id))
-    return render_template("newEvent.html", user_id=user_id)
+        return redirect(url_for("user_page", user_id=encode(user_id)))
+    return render_template("newEvent.html", user_id=encode(user_id))
 
 @app.route("/rsvp/<event_id>", methods=["GET", "POST"])
 def rsvp(event_id):
@@ -146,11 +149,13 @@ def delete_event_logic(event_id, user_id):
 
 @app.route("/delete_event/<event_id>/<user_id>", methods=["POST"])
 def delete_event(event_id, user_id):
+    user_id = decode(user_id)
     delete_event_logic(event_id, user_id)
-    return redirect(url_for("user_page", user_id=user_id))
+    return redirect(url_for("user_page", user_id=encode(user_id)))
 
 @app.route("/delete_account/<user_id>", methods=["POST"])
 def delete_account(user_id):
+    user_id = decode(user_id)
     user = db.users.find_one({"_id":user_id})
     if user != None:
         events = db.events.find({"user_id": user_id})
@@ -161,6 +166,7 @@ def delete_account(user_id):
 
 @app.route("/updateEvent/<user_id>/<event_id>", methods=["GET", "POST"])
 def update_event(user_id, event_id):
+    user_id = decode(user_id)
     # Get the event from DB first
     event = db.events.find_one({"_id": event_id, "user_id": user_id})
     if not event:
@@ -200,10 +206,10 @@ def update_event(user_id, event_id):
 
         db.events.update_one({"_id": event_id, "user_id": user_id}, {"$set": updated_fields})
 
-        return redirect(url_for("user_page", user_id=user_id))
+        return redirect(url_for("user_page", user_id=encode(user_id)))
 
     # GET request: show prefilled form
-    return render_template("updateEvent.html", user_id=user_id, event_id=event["_id"])
+    return render_template("updateEvent.html", user_id=encode(user_id), event_id=event["_id"])
 
 
 @app.route("/getEvent")
