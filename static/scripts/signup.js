@@ -11,10 +11,12 @@ const debounceDelay = 100; // milliseconds
 
 let usernameGood = false;
 let passwordGood = false;
+let display = false;
 
 document.addEventListener("DOMContentLoaded", () => {
     checkPassword();
     checkUsername();
+    display = true;
 })
 
 usernameInput.addEventListener("input", () => {
@@ -38,21 +40,23 @@ function checkUsername() {
   fetch(`/check_username?username=${encodeURIComponent(username)}`)
     .then(response => response.json())
     .then(data => {
-      if (data.exists) {
+      if (data.exists && display) {
         statusSpan.textContent = "Username already taken";
         statusSpan.style.color = "red";
         usernameGood = false;
-      } else {
+      } else if (display) {
         statusSpan.textContent = "Username available";
         statusSpan.style.color = "green";
         usernameGood = true;
       }
     })
     .catch(err => {
-      console.error("Error checking username:", err);
-      statusSpan.textContent = "Error checking username";
-      statusSpan.style.color = "orange";
-      usernameGood = false;
+      if(display) {
+        console.error("Error checking username:", err);
+        statusSpan.textContent = "Error checking username";
+        statusSpan.style.color = "orange";
+        usernameGood = false;
+      }
     });
 }
 
@@ -64,12 +68,12 @@ function checkPassword() {
         return;
     }
 
-    if(password != c_password) {
+    if((password != c_password) && display) {
         passwordSpan.innerHTML = "Passwords must match<br>"
         passwordSpan.style.color = "red";
         passwordGood = false;
     }
-    else if(password == c_password) {
+    else if((password == c_password) && display) {
         passwordSpan.innerHTML = "Passwords matching<br>"
         passwordSpan.style.color = "green";
         passwordGood = true;
@@ -77,6 +81,7 @@ function checkPassword() {
 }
 
 function validateForm() {
+    display = false;
     checkPassword();
     checkUsername();
     if(!passwordGood || !usernameGood)
