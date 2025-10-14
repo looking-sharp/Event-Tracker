@@ -1,8 +1,17 @@
 import base64
+import secrets
+
+FACTOR = secrets.randbits(32)
 
 def encode(_id: str) -> str:
-    return base64.urlsafe_b64encode(_id.encode()).decode().rstrip("=")
+    n = int.from_bytes(_id.encode(), "big")
+    mixed = n * FACTOR
+    data = mixed.to_bytes((mixed.bit_length() + 7) // 8, "big")
+    return base64.urlsafe_b64encode(data).decode().rstrip("=")
 
 def decode(encoded: str) -> str:
     padded = encoded + "=" * (-len(encoded) % 4)
-    return base64.urlsafe_b64decode(padded).decode()
+    data = base64.urlsafe_b64decode(padded)
+    mixed = int.from_bytes(data, "big")
+    n = mixed // FACTOR
+    return n.to_bytes((n.bit_length() + 7) // 8, "big").decode()
