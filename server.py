@@ -75,7 +75,7 @@ def user_page(user_id):
         return render_template("signUp.html")
     events = db.events.find({"user_id":user_id})
     num_events = db.events.count_documents({"user_id": user_id})
-    return render_template("userHome.html", username=user["username"], user_id=encode(user_id), events=events, num_events=num_events)
+    return render_template("userHome.html", username=user["username"], user_id=encode(user_id), events=events, num_events=num_events, url=request.host_url)
     
 @app.route("/createEvent/<user_id>", methods=["GET", "POST"])
 def create_event(user_id):
