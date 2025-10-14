@@ -24,6 +24,13 @@ app = Flask(__name__)
 def format_time(time_str):
     return datetime.strptime(time_str, "%H:%M").strftime("%I:%M %p")
 
+def getDecodedUserID(user_id):
+    try:
+        user_id = decode(user_id)
+        return user_id
+    except Exception as e:
+        return -1
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     return render_template("index.html")
@@ -68,18 +75,22 @@ def login():
 
 @app.route("/userHome/<user_id>")
 def user_page(user_id):
-    user_id = decode(user_id)
+    user_id = getDecodedUserID(user_id)
+    if user_id == -1 :
+        return redirect(url_for("login"))
     user = db.users.find_one({"_id":user_id})
     if user == None:
         # user needs to log in first
-        return render_template("signUp.html")
+        return redirect(url_for("sign_up"))
     events = db.events.find({"user_id":user_id})
     num_events = db.events.count_documents({"user_id": user_id})
     return render_template("userHome.html", username=user["username"], user_id=encode(user_id), events=events, num_events=num_events, url=request.host_url)
     
 @app.route("/createEvent/<user_id>", methods=["GET", "POST"])
 def create_event(user_id):
-    user_id = decode(user_id)
+    user_id = getDecodedUserID(user_id)
+    if user_id == -1 :
+        return redirect(url_for("login"))
     if request.method == "POST":
         event_name = request.form["eventName"]
         event_date = request.form["eventDate"]
@@ -149,13 +160,17 @@ def delete_event_logic(event_id, user_id):
 
 @app.route("/delete_event/<event_id>/<user_id>", methods=["POST"])
 def delete_event(event_id, user_id):
-    user_id = decode(user_id)
+    user_id = getDecodedUserID(user_id)
+    if user_id == -1 :
+        return redirect(url_for("login"))
     delete_event_logic(event_id, user_id)
     return redirect(url_for("user_page", user_id=encode(user_id)))
 
 @app.route("/delete_account/<user_id>", methods=["POST"])
 def delete_account(user_id):
-    user_id = decode(user_id)
+    user_id = getDecodedUserID(user_id)
+    if user_id == -1 :
+        return redirect(url_for("login"))
     user = db.users.find_one({"_id":user_id})
     if user != None:
         events = db.events.find({"user_id": user_id})
@@ -166,7 +181,9 @@ def delete_account(user_id):
 
 @app.route("/updateEvent/<user_id>/<event_id>", methods=["GET", "POST"])
 def update_event(user_id, event_id):
-    user_id = decode(user_id)
+    user_id = getDecodedUserID(user_id)
+    if user_id == -1 :
+        return redirect(url_for("login"))
     # Get the event from DB first
     event = db.events.find_one({"_id": event_id, "user_id": user_id})
     if not event:

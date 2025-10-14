@@ -1,7 +1,9 @@
 import base64
-import secrets
+import os
+from dotenv import load_dotenv
 
-FACTOR = secrets.randbits(32)
+load_dotenv()
+FACTOR = int(os.getenv("SEC_FACTOR"))
 
 def encode(_id: str) -> str:
     n = int.from_bytes(_id.encode(), "big")
