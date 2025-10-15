@@ -1,5 +1,5 @@
 form { 
-  width: 500px; 
+  width: 600px; 
   margin: auto; 
 }
 
@@ -9,7 +9,7 @@ label {
 }
 
 input, textarea {
-  width: 100%; 
+  width: 95%; 
   padding: 0.5em; 
   margin-top: 0.2em; 
 }
@@ -30,7 +30,7 @@ input, textarea {
 }
 
 #attendence_restriction {
-  width:480px;
+  width: 96.5%;
 }
 
 button { 
@@ -101,12 +101,13 @@ input[type=checkbox], input[type=radio] {
   top: -21px;
   width: 25px;
   height: auto;
+  transition: transform 0.2s ease;
 }
 
 #optional-questions {
   margin: 0;
   border: solid 1px gray;
-  width: 500px;
+  width: 570px;
   padding: 0.5em;
   padding-top: 0;
 }
@@ -136,3 +137,4 @@ input[type=checkbox], input[type=radio] {
   height: auto;
   margin: auto;
 }
+
