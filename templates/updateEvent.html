@@ -15,43 +15,51 @@
     </nav>
 </header>
 <body class="non-fixed" id="{{ event_id }}">
-    <form action="/updateEvent/{{ user_id }}/{{ event_id }}" method="POST">
-        <label for="eventName" title="The name of your event">Event Name:</label>
-        <input type="text" id="eventName" name="eventName" required>
+    <div id="content" style="display: none;">
+        <form action="/updateEvent/{{ user_id }}/{{ event_id }}" method="POST">
+            <label for="eventName" title="The name of your event">Event Name:</label>
+            <input type="text" id="eventName" name="eventName" required>
 
-        <label for="eventDate" title="the date of your event">Date:</label>
-        <input type="date" id="eventDate" name="eventDate" required>
+            <label for="eventDate" title="the date of your event">Date:</label>
+            <input type="date" id="eventDate" name="eventDate" required>
 
-        <label for="startTime" title="Start time of your event">Start Time:</label>
-        <input type="time" id="startTime" name="startTime" required>
+            <label for="startTime" title="Start time of your event">Start Time:</label>
+            <input type="time" id="startTime" name="startTime" required>
 
-        <label for="endTime" title="End time of your event">End Time:</label>
-        <input type="time" id="endTime" name="endTime" required>
+            <label for="endTime" title="End time of your event">End Time:</label>
+            <input type="time" id="endTime" name="endTime" required>
 
-        <label for="location" title="Location of your event">Location:</label>
-        <input type="text" id="location" name="location" required>
+            <label for="location" title="Location of your event">Location:</label>
+            <input type="text" id="location" name="location" required>
 
-        <label for="description" title="Description of your event">Event Description:</label>
-        <textarea id="description" name="description" rows="4" required></textarea>
+            <label for="description" title="Description of your event">Event Description:</label>
+            <textarea id="description" name="description" rows="4" required></textarea>
 
-        <label>Optional Settings</label>
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" id="dropdown_arrow"></svg><br>
+            <label>Optional Settings</label>
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" id="dropdown_arrow"></svg><br>
 
-        <div id="optional-questions" style="display: none;">
-            <label for="public" title="If checked, attendees can see the names of other people attending">Public Attendee Info: 
-            <input type="checkbox" id="public" name="public" checked> </label>
+            <div id="optional-questions" style="display: none;">
+                <label for="public" title="If checked, attendees can see the names of other people attending" style="display: none">Public Attendee Info: 
+                <input type="checkbox" id="public" name="public" checked style="display: none"> </label>
 
-            <div class="side_div">
-                <label for="age_restriction" title="Input minimum age allowed to attend your event, or leave blank" class="side_label">Age Restriction: </label>
-                <input type="number" class="side_text" id="age_restriction" name="age_restriction">
+                <div class="side_div">
+                    <label for="age_restriction" title="Input minimum age allowed to attend your event, or leave blank" class="side_label">Age Restriction: </label>
+                    <input type="number" class="side_text" id="age_restriction" name="age_restriction">
+                </div>
+
+                <label for="attendence_restriction" title="Input any restrictions that might restrict attendence (e.g. club members only) or leave blank">Attendence Restriction</label>
+                <textarea id="attendence_restriction" name="attendence_restriction" id="attendence_restriction" rows="4"></textarea>
+
+                <p><b>These options will show up on the RSVP form</b><br>Atendees will have to affirm they meet the criteria before they can RSVP</p>
             </div>
 
-            <label for="attendence_restriction" title="Input any restrictions that might restrict attendence (e.g. club members only) or leave blank">Attendence Restriction</label>
-            <textarea id="attendence_restriction" name="attendence_restriction" id="attendence_restriction" rows="4"></textarea>
-        </div>
-
-        <button type="submit">Update Event</button>
-    </form>
+            <button type="submit">Update Event</button>
+        </form>
+    </div>
+    <div id="loading" class=".fixed" style="display: grid;">
+        <p>Fetching Event Details</p>
+        <svg fill="rgb(4, 170, 109)" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" type="rotate" dur="0.75s" values="0 12 12;360 12 12" repeatCount="indefinite"/></path></svg>
+    </div>
     <footer>
         Website by Thomas Sharp
     </footer>
