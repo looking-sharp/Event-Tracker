@@ -28,7 +28,8 @@
                 <p> From {{ event["startTime"] }} to {{ event["endTime"] }} on {{ event["eventDate"] }} </p>
                 <p> {{ event["eventLocation"] }} </p>
                 <p> {{ event["eventDescription"] }} </p>
-                <p> RSVP at: <a href='{{url}}rsvp/{{event["_id"]}}''>{{url}}rsvp/{{event["_id"]}}</a></p>
+                <!-- NOT YET IMPLEMENTED -->
+                <p style="display: none;"> RSVP at: <a href='{{url}}rsvp/{{event["_id"]}}''>{{url}}rsvp/{{event["_id"]}}</a></p>
             </div>
             <div class="Delete-Div">
                 <form action='{{ url_for("delete_event", event_id=event["_id"], user_id=user_id) }}' method="POST" class="drop-button-class">
@@ -42,6 +43,7 @@
                     </button>
                 </form>
                 {% if event["rsvps"]|length != 0 %}
+                <!-- NOT YET IMPLEMENTED -->
                 <form action='' method="POST" class="drop-button-class" style="display: none">
                     <button type="submit" onclick="" class="drop-button">
                         Contact Responders
