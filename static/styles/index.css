@@ -13,8 +13,13 @@ td, th {
   border: 1px solid #ddd;
   padding: 8px;
   max-width: 200px;
-  overflow: auto;
+  overflow: hidden;
   text-overflow: ellipsis;
+}
+
+th {
+  position: sticky;
+  top: -1px;
 }
 
 tr:nth-child(even){background-color: #f2f2f2;}
@@ -111,7 +116,7 @@ table {
   display: block;
 }
 
-tbody {
+table {
   display: table;
   width: 99.9%;
 }
@@ -204,4 +209,13 @@ footer {
 
 #delete-account button:hover {
   background-color: #7e0606;
+}
+
+.rsvp-table-div {
+  display: block;
+  overflow: hidden;
+  overflow-y: scroll;
+  max-height: 225px;
+  margin-bottom: 20px;
+  scrollbar-gutter: stable;
 }
