@@ -54,17 +54,17 @@
         
     {% if event.get("age_restriction") %}
     <div class="opt-div">
-        <!-- show age restriction -->
-        <label for="age">I affirm I am at least {{ event["age_restriction"] }} years old</label>
-        <input type="checkbox" class="age" id="age" required>
+      <!-- show age restriction -->
+      <label for="age">I affirm I am at least {{ event["age_restriction"] }} years old</label>
+      <input type="checkbox" class="age" id="age" required>
     </div>
     {% endif %}
 
     {% if event.get("attendence_restriction") %}
     <div class="opt-div">
-        <!-- show age restriction -->
-        <label for="aff">I affirm that I meet the criteria: {{ event["attendence_restriction"] }}</label>
-        <input type="checkbox" class="aff" id="aff" required>
+      <!-- show age restriction -->
+      <label for="aff">I affirm that I meet the criteria: {{ event["attendence_restriction"] }}</label>
+      <input type="checkbox" class="aff" id="aff" required>
     </div>
     {% endif %}
 
