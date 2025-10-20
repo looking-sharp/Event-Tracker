@@ -4,6 +4,7 @@ from dotenv import load_dotenv # type: ignore
 from flask import Flask, request, redirect, url_for, render_template, jsonify # type: ignore
 from datetime import datetime
 from encode import encode, decode
+import email_handeler
 import random
 import uuid
 import os
@@ -306,6 +307,11 @@ def api_seed_test_data():
         "message": f"Seeded {num_events} events with {num_rsvps} RSVPs each.",
         "events": created_event_ids
     })
+
+@app.route("/test-email", methods=["GET", "POST"])
+def test_email():
+    email_handeler.send_test_email()
+    return redirect(url_for("index"))
 
 if __name__ == "__main__":
     app.run(debug=True)
