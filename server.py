@@ -243,6 +243,26 @@ def get_event():
         return jsonify(data)
     return jsonify({"exists":False, "event": None})
 
+@app.route("/email", methods=["GET", "POST"])
+def email_attendees():
+    user_id = request.args.get("uid")
+    user_id = getDecodedUserID(user_id)
+    if user_id == -1 :
+        return redirect(url_for("login"))
+    if request.method == "POST":
+        # Get form data
+        subject = request.form["subject"]
+        body = request.form["body"]
+        recipients = request.form.getlist("recipients")
+
+        return "Email submitted!"
+
+    else:
+        event_id = request.args.get("eventid")
+        event = db.events.find_one({"_id": event_id, "user_id": user_id})
+        if(event == None):
+            return redirect(url_for("index"))
+        return render_template("emailAttendees.html", user_id=encode(user_id), event_id=event_id, event=event)
 
 '''
 
