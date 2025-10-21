@@ -11,12 +11,11 @@
 }
 
 input, textarea {
-    width:100%;
+    width:97%;
 }
 
 input[type="checkbox"] {
-    margin:0;
-    position: relative;
+    margin-left: 580px;
 }
 
 fieldset label {
@@ -37,6 +36,8 @@ fieldset label {
 }
 
 .scrollable input[type="checkbox"] {
+    position: relative;
+    margin: 0;
     flex-shrink: 0;
     width: 16px;
     height: 16px;
@@ -46,4 +47,13 @@ fieldset label {
 fieldset input[type="text"] {
     width:auto;
     padding:9px;
+}
+
+.ql-editor p {
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    unicode-bidi: isolate;
 }

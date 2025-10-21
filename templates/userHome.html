@@ -33,7 +33,7 @@
         <p> {{ event["eventLocation"] }} </p>
         <p> {{ event["eventDescription"] }} </p>
         <!-- NOT YET IMPLEMENTED -->
-        <p style="display: none;"> RSVP at: <a href='{{url}}rsvp/{{event["_id"]}}''>{{url}}rsvp/{{event["_id"]}}</a></p>
+        <p> RSVP at: <a href='{{url}}rsvp/{{event["_id"]}}''>{{url}}rsvp/{{event["_id"]}}</a></p>
       </div>
       <div class="Delete-Div">
         <form action='{{ url_for("delete_event", event_id=event["_id"], user_id=user_id) }}' method="POST" class="drop-button-class">
@@ -47,12 +47,20 @@
           </button>
         </form>
         {% if event["rsvps"]|length != 0 %}
-        <!-- NOT YET IMPLEMENTED -->
-        <form action='' method="POST" class="drop-button-class" style="display: none">
+        <form class="drop-button-class">
+          <button class="drop-button">
+            <a href="{{ url_for('email_attendees', uid=user_id, eventid=event['_id']) }}">
+              Contact Responders
+            </a>
+          </button>
+        </form>
+        <!--
+        <form action="{{ url_for('email_attendees', uid=user_id, eventid=event['_id']) }}" method="GET" class="drop-button-class">
           <button type="submit" onclick="" class="drop-button">
             Contact Responders
           </button>
         </form>
+        -->
         {% endif %}
       </div>
     </div>

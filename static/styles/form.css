@@ -126,6 +126,11 @@ input[type=checkbox], input[type=radio] {
   background-color: #047f52;
 }
 
+.drop-button a {
+  text-decoration: none;
+  color: white;
+}
+
 #loading {
   flex: 1;
   margin: auto;

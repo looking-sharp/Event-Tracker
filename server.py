@@ -254,7 +254,10 @@ def email_attendees():
         subject = request.form["subject"]
         body = request.form["body"]
         recipients = request.form.getlist("recipients")
-
+        additional_email = request.form["eventEmail"]
+        if(additional_email != None):
+            recipients.append(additional_email)
+        email_handeler.send_email(subject, recipients, body)
         return "Email submitted!"
 
     else:

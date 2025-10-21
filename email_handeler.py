@@ -42,3 +42,38 @@ def send_test_email():
         print(f"Error sending email: {e}")
     finally:
         server.quit() 
+
+
+
+def send_email(subject, recipients, body):
+    msg = EmailMessage()
+    msg['Subject'] = subject
+    msg['From'] = email
+    msg['To'] = email
+    msg['Bcc'] = ", ".join(recipients)
+
+    with open("templates/signature.html", "r") as f:
+        signature_html = f.read()
+
+        msg.add_alternative(f"""
+        <html>
+        <body>
+            {body}
+            <br>
+            {signature_html}
+        </body>
+        </html>
+        """, subtype="html")
+
+    try:
+        # For TLS (most common, port 587)
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        server.ehlo()
+        server.starttls() 
+        server.login(email, password)
+        server.send_message(msg)
+        print("Email sent successfully!")
+    except Exception as e:
+        print(f"Error sending email: {e}")
+    finally:
+        server.quit() 
