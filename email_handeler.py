@@ -45,8 +45,9 @@ def send_test_email():
 
 
 
-def send_email(subject, recipients, body):
+def send_email(subject, recipients, body, event):
     msg = EmailMessage()
+    msg_head = f"This email is regarding: {event["eventName"]} on {event["eventDate"]}"
     msg['Subject'] = subject
     msg['From'] = email
     msg['To'] = email
@@ -54,10 +55,10 @@ def send_email(subject, recipients, body):
 
     with open("templates/signature.html", "r") as f:
         signature_html = f.read()
-
         msg.add_alternative(f"""
         <html>
         <body>
+            <p><b>{msg_head}</b></p>
             {body}
             <br>
             {signature_html}

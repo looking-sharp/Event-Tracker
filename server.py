@@ -257,7 +257,14 @@ def email_attendees():
         additional_email = request.form["eventEmail"]
         if(additional_email != None):
             recipients.append(additional_email)
-        email_handeler.send_email(subject, recipients, body)
+
+        event_id = request.args.get("eventid")
+        event = db.events.find_one({"_id": event_id, "user_id": user_id})
+        if(event == None):
+            return redirect(url_for("index"))
+
+
+        email_handeler.send_email(subject, recipients, body, event)
         return "Email submitted!"
 
     else:
