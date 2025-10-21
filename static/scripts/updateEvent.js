@@ -31,7 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("endTime").value = formatTimeForInput(data.event.endTime);
             document.getElementById("location").value = data.event.eventLocation;
             document.getElementById("description").value = data.event.eventDescription;
-            document.getElementById("public").checked = data.event.public;
 
             if(data.event.hasOwnProperty("age_restriction")) {
                 document.getElementById("age_restriction").value = Number(data.event.age_restriction);

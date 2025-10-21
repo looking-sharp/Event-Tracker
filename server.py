@@ -4,8 +4,6 @@ from dotenv import load_dotenv # type: ignore
 from flask import Flask, request, redirect, url_for, render_template, jsonify # type: ignore
 from datetime import datetime
 from encode import encode, decode
-import email_handeler
-import random
 import uuid
 import os
 
@@ -132,27 +130,6 @@ def create_event(user_id):
         return redirect(url_for("user_page", user_id=encode(user_id)))
     return render_template("newEvent.html", user_id=encode(user_id))
 
-@app.route("/rsvp/<event_id>", methods=["GET", "POST"])
-def rsvp(event_id):
-    event = db.events.find_one({"_id": event_id})
-    if not event:
-        return "Event not found", 404
-    if request.method == "POST":
-        email = request.form["email"]
-        first_name = request.form["firstName"]
-        last_name = request.form["lastName"]
-        rsvp_entry = {
-            "email": email,
-            "firstName": first_name,
-            "lastName": last_name,
-        }
-        db.events.update_one(
-            {"_id": event_id},
-            {"$addToSet": {"rsvps": rsvp_entry}}
-        )
-        return "Thanks for RSVPing!"
-    return render_template("rsvpForm.html", event=event)
-
 def delete_event_logic(event_id, user_id):
     result = db.events.delete_one({"_id": event_id, "user_id": user_id})
     if result.deleted_count == 0:
@@ -166,19 +143,6 @@ def delete_event(event_id, user_id):
         return redirect(url_for("login"))
     delete_event_logic(event_id, user_id)
     return redirect(url_for("user_page", user_id=encode(user_id)))
-
-@app.route("/delete_account/<user_id>", methods=["POST"])
-def delete_account(user_id):
-    user_id = getDecodedUserID(user_id)
-    if user_id == -1 :
-        return redirect(url_for("login"))
-    user = db.users.find_one({"_id":user_id})
-    if user != None:
-        events = db.events.find({"user_id": user_id})
-        for event in events:
-            delete_event_logic(event["_id"], user_id)
-        db.users.delete_one({"_id": user_id})
-    return redirect(url_for("sign_up"))
 
 @app.route("/updateEvent/<user_id>/<event_id>", methods=["GET", "POST"])
 def update_event(user_id, event_id):
@@ -229,7 +193,6 @@ def update_event(user_id, event_id):
     # GET request: show prefilled form
     return render_template("updateEvent.html", user_id=encode(user_id), event_id=event["_id"])
 
-
 @app.route("/getEvent")
 def get_event():
     print("got request")
@@ -242,99 +205,6 @@ def get_event():
         }
         return jsonify(data)
     return jsonify({"exists":False, "event": None})
-
-@app.route("/email", methods=["GET", "POST"])
-def email_attendees():
-    user_id = request.args.get("uid")
-    user_id = getDecodedUserID(user_id)
-    if user_id == -1 :
-        return redirect(url_for("login"))
-    if request.method == "POST":
-        # Get form data
-        subject = request.form["subject"]
-        body = request.form["body"]
-        recipients = request.form.getlist("recipients")
-        additional_email = request.form["eventEmail"]
-        if(additional_email != None):
-            recipients.append(additional_email)
-        email_handeler.send_email(subject, recipients, body)
-        return "Email submitted!"
-
-    else:
-        event_id = request.args.get("eventid")
-        event = db.events.find_one({"_id": event_id, "user_id": user_id})
-        if(event == None):
-            return redirect(url_for("index"))
-        return render_template("emailAttendees.html", user_id=encode(user_id), event_id=event_id, event=event)
-
-'''
-
-** Debug Commands **
-
-'''
-
-def generate_random_time():
-    hour = random.randint(8, 18)
-    return datetime.strptime(f"{hour}:00", "%H:%M").strftime("%I:%M %p")
-
-@app.route("/api/seed_test_data", methods=["POST"])
-def api_seed_test_data():
-    data = request.json
-    user_id = data.get("user_id")
-    num_events = int(data.get("events", 3))
-    num_rsvps = int(data.get("rsvps", 5))
-
-    user = db.users.find_one({"_id": user_id})
-    if not user:
-        return jsonify({"error": f"User ID {user_id} not found"}), 404
-
-    created_event_ids = []
-
-    for i in range(num_events):
-        event_id = uuid.uuid4().hex[:8]
-        event_name = f"Test Event {i+1}"
-        date_str = datetime.now().strftime("%Y-%m-%d")
-        start_time = generate_random_time()
-        end_time = generate_random_time()
-        public = "yes"
-        event_location = f"Test Location {i+1}"
-        event_description = f"This is test event number {i+1}."
-
-        db.events.insert_one({
-            "_id": event_id,
-            "user_id": user_id,
-            "eventName": event_name,
-            "eventDate": date_str,
-            "startTime": start_time,
-            "endTime": end_time,
-            "public": public,
-            "eventLocation": event_location,
-            "eventDescription": event_description,
-            "rsvps": []
-        })
-
-        for j in range(num_rsvps):
-            rsvp_entry = {
-                "email": f"guest{j+1}@example.com",
-                "firstName": f"Guest{j+1}",
-                "lastName": "Tester"
-            }
-            db.events.update_one(
-                {"_id": event_id},
-                {"$addToSet": {"rsvps": rsvp_entry}}
-            )
-
-        created_event_ids.append(event_id)
-
-    return jsonify({
-        "message": f"Seeded {num_events} events with {num_rsvps} RSVPs each.",
-        "events": created_event_ids
-    })
-
-@app.route("/test-email", methods=["GET", "POST"])
-def test_email():
-    email_handeler.send_test_email()
-    return redirect(url_for("index"))
 
 if __name__ == "__main__":
     app.run(debug=True)
