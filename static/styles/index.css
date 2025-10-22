@@ -196,6 +196,7 @@ footer {
 
 #delete-account {
   width: 100%;
+  margin-bottom:0;
 }
 
 #delete-account button {
