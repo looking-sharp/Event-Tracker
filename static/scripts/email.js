@@ -6,20 +6,6 @@ const unselectAllBtn = document.getElementById('unselectAll');
 const checkboxes = document.querySelectorAll('input[name="recipients"]');
 const search = document.getElementById("search")
 const participants = document.querySelectorAll("#participantsList label");
-const includeYourself = document.getElementById("includeYourself");
-const eventEmail = document.getElementById("eventEmail");
-const eventEmailDiv = document.getElementById("eventEmailDiv");
-
-document.addEventListener('DOMContentLoaded', () => {
-    if(includeYourself.checked) {
-        eventEmailDiv.style.display="block";
-        eventEmail.required = "required";
-    }
-    else {
-        eventEmailDiv.style.display="none";
-        eventEmail.required = "";
-    }
-});
 
 form.addEventListener("submit", (e) => {
     document.getElementById("emailBody").value = quill.root.innerHTML;
@@ -45,17 +31,6 @@ selectAllBtn.addEventListener('click', () => {
 
 unselectAllBtn.addEventListener('click', () => {
     checkboxes.forEach(cb => cb.checked = false);
-});
-
-includeYourself.addEventListener("change", () => {
-    if(includeYourself.checked) {
-        eventEmailDiv.style.display="block";
-        eventEmail.required = "required";
-    }
-    else {
-        eventEmailDiv.style.display="none";
-        eventEmail.required = "";
-    }
 });
 
 search.addEventListener("input", () => {

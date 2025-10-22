@@ -41,6 +41,7 @@ def sign_up():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
+        email = request.form["email"]
         user_id = uuid.uuid4().hex[:8]
         # while unlikely, don't want more than one user to have same id
         while db.users.find_one({"_id":user_id}):
@@ -48,8 +49,10 @@ def sign_up():
         db.users.insert_one({
             "_id": user_id,
             "username": username,
-            "password": password
+            "password": password,
+            "email": email
         })
+        email_handeler.send_welcome_email(email)
         return redirect(url_for("user_page", user_id=encode(user_id)))
     return render_template("signUp.html")
 
@@ -178,6 +181,7 @@ def delete_account(user_id):
         return redirect(url_for("login"))
     user = db.users.find_one({"_id":user_id})
     if user != None:
+        email_handeler.send_account_delete_email(user["email"])
         events = db.events.find({"user_id": user_id})
         for event in events:
             delete_event_logic(event["_id"], user_id)
@@ -258,18 +262,23 @@ def email_attendees():
         subject = request.form["subject"]
         body = request.form["body"]
         recipients = request.form.getlist("recipients")
-        additional_email = request.form["eventEmail"]
-        if(additional_email != None):
-            recipients.append(additional_email)
+        try:
+            additional_email = request.form["includeYourself"]
+            email = db.users.find_one({"_id": user_id})
+            recipients.append(email["email"])
+        except Exception as e:
+            print(e)
+        finally:
+            #if(additional_email):
+            #    recipients.append(additional_email)
+            print("email")
+            event_id = request.args.get("eventid")
+            event = db.events.find_one({"_id": event_id, "user_id": user_id})
+            if(event == None):
+                return redirect(url_for("index"))
 
-        event_id = request.args.get("eventid")
-        event = db.events.find_one({"_id": event_id, "user_id": user_id})
-        if(event == None):
-            return redirect(url_for("index"))
-
-        email_handeler.send_email(subject, recipients, body, event)
-        return "Email submitted!"
-
+            email_handeler.send_email(subject, recipients, body, event)
+            return "Email submitted!"
     else:
         event_id = request.args.get("eventid")
         event = db.events.find_one({"_id": event_id, "user_id": user_id})
