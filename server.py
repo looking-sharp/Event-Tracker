@@ -154,6 +154,10 @@ def rsvp(event_id):
     return render_template("rsvpForm.html", event=event)
 
 def delete_event_logic(event_id, user_id):
+    event = db.events.find_one({"_id": event_id})
+    responders = [r.get("email") for r in event.get("rsvps", []) if "email" in r]
+    if responders:
+        email_handeler.send_cancel_email(responders, event)
     result = db.events.delete_one({"_id": event_id, "user_id": user_id})
     if result.deleted_count == 0:
         return "Event not found or you don't have permission", 404
@@ -262,7 +266,6 @@ def email_attendees():
         event = db.events.find_one({"_id": event_id, "user_id": user_id})
         if(event == None):
             return redirect(url_for("index"))
-
 
         email_handeler.send_email(subject, recipients, body, event)
         return "Email submitted!"

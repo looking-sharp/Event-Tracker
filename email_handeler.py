@@ -43,8 +43,6 @@ def send_test_email():
     finally:
         server.quit() 
 
-
-
 def send_email(subject, recipients, body, event):
     msg = EmailMessage()
     msg_head = f"This email is regarding: {event["eventName"]} on {event["eventDate"]}"
@@ -60,6 +58,41 @@ def send_email(subject, recipients, body, event):
         <body>
             <p><b>{msg_head}</b></p>
             {body}
+            <br>
+            {signature_html}
+        </body>
+        </html>
+        """, subtype="html")
+
+    try:
+        # For TLS (most common, port 587)
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        server.ehlo()
+        server.starttls() 
+        server.login(email, password)
+        server.send_message(msg)
+        print("Email sent successfully!")
+    except Exception as e:
+        print(f"Error sending email: {e}")
+    finally:
+        server.quit() 
+
+def send_cancel_email(recipients, event):
+    msg = EmailMessage()
+    msg_head = f"This email is regarding: {event["eventName"]} on {event["eventDate"]}"
+    msg['Subject'] = "An Event you RSVP'd for was Canceled"
+    msg['From'] = email
+    msg['To'] = email
+    msg['Bcc'] = ", ".join(recipients)
+
+    with open("templates/signature.html", "r") as f:
+        signature_html = f.read()
+        msg.add_alternative(f"""
+        <html>
+        <body>
+            <p><b>{msg_head}</b></p>
+            <p>This is an automated email to inform you that an event you RSVP'd to was canceled. </p>
+            <p>For any other questions, you can reach out to the event coordinator</p>
             <br>
             {signature_html}
         </body>
